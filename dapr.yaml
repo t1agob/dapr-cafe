@@ -1,0 +1,12 @@
+version: 1
+common:
+  resourcesPath: ./components/
+apps:
+  - appID: order-management
+    appDirPath: ./order-management/
+    appPort: 3000
+    command: ["npm", "run", "start"]
+  - appID: order-processor
+    appDirPath: ./order-processor/
+    appPort: 6000
+    command: ["go", "run", "."]
