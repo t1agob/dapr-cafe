@@ -60,14 +60,9 @@ jobs:
         with:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
-      - uses: Azure/k8s-deploy@v5
-        with:
-          action: deploy
-          manifests: |
-             ./deploy/deployment.yml
-             ./deploy/service.yml
-          images: |
-             daprcafe.azurecr.io/order-management:latest
+      - run: |
+          kubectl apply -f deploy/deployment.yaml deploy/service.yaml
+
           
 
   close_pull_request_job:
