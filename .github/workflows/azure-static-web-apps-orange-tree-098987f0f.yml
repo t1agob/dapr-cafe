@@ -64,8 +64,8 @@ jobs:
         with:
           action: deploy
           manifests: |
-             deploy/deployment.yml
-             deploy/service.yml
+             ./deploy/deployment.yml
+             ./deploy/service.yml
           images: |
              daprcafe.azurecr.io/order-management:latest
           
