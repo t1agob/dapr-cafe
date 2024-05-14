@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: order-management
+  name: order-management
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: order-management
+  template:
+    metadata:
+      labels:
+        run: order-management
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "order-management"
+        dapr.io/app-port: "40000"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/sidecar-listen-addresses: "0.0.0.0"
+    spec:
+      containers:
+        - name: order-management
+          image: daprcafe.azurecr.io/order-management:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 40000
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: order-processor
+  name: order-processor
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: order-processor
+  template:
+    metadata:
+      labels:
+        run: order-processor
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "order-processor"
+        dapr.io/app-port: "30000"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/sidecar-listen-addresses: "0.0.0.0"
+    spec:
+      containers:
+        - name: order-processor
+          image: daprcafe.azurecr.io/order-processor:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 30000
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
