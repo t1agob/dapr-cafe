@@ -42,8 +42,8 @@ jobs:
           password: ${{ secrets.ACR_PASS }}
 
       - run: |
-          docker build ./order-management -t daprcafe.azurecr.io/order-management:latest
-          docker push daprcafe.azurecr.io/order-management:latest
+          docker build ./order-management -t daprcafe.azurecr.io/order-management:new
+          docker push daprcafe.azurecr.io/order-management:new
           
       - uses: azure/setup-kubectl@v4
 
