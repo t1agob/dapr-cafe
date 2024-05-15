@@ -1,4 +1,5 @@
 import { Button } from '@headlessui/react'
+import { useEffect, useState } from 'react';
 
 type Props = {
   food: string;
@@ -7,14 +8,28 @@ type Props = {
 };
 
 
+export async function fetchSettings() {
+
+    const response = await fetch('/api/settings');
+    return await response.json();
+}
+
 
 function OrderCommand({food, drink}: Props) {
 
-  const apiUrl = process.env.API_URL;
-  console.log("API URL: " + apiUrl);
+  const [settings, setSettings] = useState({});
+  useEffect(() => {
+
+    fetchSettings().then((settings) => {
+      setSettings(settings);
+      console.log(settings);
+    });
+  }, []);
+
+  console.log("API URL: " + JSON.stringify(settings));
 
   function submitOrder() {
-    fetch(`${apiUrl}/order`, {
+    fetch(`https://cors-anywhere.herokuapp.com/http://51.8.246.178/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
