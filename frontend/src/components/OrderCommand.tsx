@@ -11,6 +11,7 @@ type Props = {
 function OrderCommand({food, drink}: Props) {
 
   const apiUrl = process.env.API_URL;
+  console.log("API URL: " + apiUrl);
 
   function submitOrder() {
     fetch(`${apiUrl}/order`, {
