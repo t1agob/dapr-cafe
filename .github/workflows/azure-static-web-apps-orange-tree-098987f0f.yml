@@ -101,7 +101,8 @@ jobs:
           
           app_location: "/frontend/"
           api_location: "" 
-          output_location: "build" 
+          output_location: "build"
+          app_build_command: 'npm run build' 
         env: 
           API_URL: ${{ secrets.API_URL }}
           
