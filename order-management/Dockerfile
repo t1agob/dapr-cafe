@@ -22,4 +22,4 @@ RUN npm ci --production
 COPY --from=builder /usr/src/app/dist ./dist
 
 EXPOSE 40000
-CMD [ "npm", "run", "start" ]
+CMD [ "node", "dist/index.js" ]
