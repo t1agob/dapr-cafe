@@ -7,4 +7,5 @@ COPY . .
 EXPOSE 40000
 RUN chown -R node /usr/src/app
 USER node
+RUN npm run build
 CMD ["npm", "run", "start"]
