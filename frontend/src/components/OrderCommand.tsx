@@ -10,12 +10,16 @@ type Props = {
 
 function OrderCommand({food, drink}: Props) {
 
+  const apiUrl = process.env.API_URL;
+
   function submitOrder() {
-    fetch("https://cors-anywhere.herokuapp.com/http://51.8.235.29/order", {
+    fetch(`${apiUrl}/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        "origin": "daprcafe",
+        "X-Requested-With": "XMLHttpRequest",
       },
       body: JSON.stringify({
         customer_email: "john.doe@email.com",

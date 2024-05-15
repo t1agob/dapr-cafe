@@ -8,7 +8,7 @@ import {
 import './App.css';
 import { Home } from './pages/Home';
 import { Customer } from './pages/Customer';
-import Employee from './pages/Employee'
+import { Employee }  from './pages/Employee'
 
 function App() {
   return (    

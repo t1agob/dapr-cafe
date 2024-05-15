@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar } from '../components/Navbar'
 
-function Employee() {
+export function Employee() {
   return (
     <div className='bg-gray-100'>
 
@@ -9,5 +9,3 @@ function Employee() {
     </div>
   )
 }
-
-export default Employee
