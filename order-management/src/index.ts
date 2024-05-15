@@ -3,6 +3,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { DaprClient } from "@dapr/dapr";
 import { v4 as uuidv4 } from 'uuid';
+import cors from 'cors';
 
 import { Order } from "./types";
 
@@ -10,6 +11,7 @@ dotenv.config();
 
 const app: Express = express();
 app.use(express.json());
+app.use(cors());
 const daprHost = process.env.DAPR_HOST ?? "http://localhost";
 const daprPort = process.env.DAPR_HTTP_PORT ?? "40100";
 const httpServerPort = process.env.PORT ?? "40000";
