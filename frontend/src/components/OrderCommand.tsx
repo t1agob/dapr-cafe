@@ -16,25 +16,16 @@ export async function fetchSettings() {
 
 
 function OrderCommand({food, drink}: Props) {
+  console.log("API URL: " + process.env.API_URL);
 
-  const [settings, setSettings] = useState({});
-  useEffect(() => {
-
-    fetchSettings().then((settings) => {
-      setSettings(settings);
-      console.log(settings);
-    });
-  }, []);
-
-  console.log("API URL: " + JSON.stringify(settings));
-
+  const apiUrl = process.env.API_URL;
   function submitOrder() {
-    fetch(`https://cors-anywhere.herokuapp.com/http://51.8.246.178/order`, {
+    fetch(`${apiUrl}/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "origin": "daprcafe",
+        origin: "daprcafe",
         "X-Requested-With": "XMLHttpRequest",
       },
       body: JSON.stringify({
