@@ -95,7 +95,7 @@ func newOrderEventHandler(ctx context.Context, e *common.TopicEvent) (retry bool
 	}
 
 	fmt.Println("Saving order state: ", orderData.Id)
-	err = client.SaveState(ctx, stateStoreName, orderData.Id, data, nil)
+	err = client.SaveState(ctx, stateStoreName, "orderprocessor", data, nil)
 	if err != nil {
 		log.Printf("error saving order state: %v", err)
 	}

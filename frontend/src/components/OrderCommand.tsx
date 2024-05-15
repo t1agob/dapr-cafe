@@ -1,4 +1,5 @@
-import { Button } from '@headlessui/react'
+import { Button } from "@headlessui/react";
+import { useState } from "react";
 
 type Props = {
   food: string;
@@ -6,49 +7,67 @@ type Props = {
   email: string;
 };
 
+type SubmitOrderResponse = {
+  id: string;
+};
 
-export async function fetchSettings() {
-
-    const response = await fetch('/api/settings');
-    return await response.json();
-}
-
-
-function OrderCommand({food, drink}: Props) {
+function OrderCommand({ food, drink }: Props) {
   console.log("API URL: " + process.env.API_URL);
 
-  const apiUrl = process.env.API_URL;
-  function submitOrder() {
-    fetch(`${apiUrl}/order`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        origin: "daprcafe",
-        "X-Requested-With": "XMLHttpRequest",
-      },
-      body: JSON.stringify({
-        customer_email: "john.doe@email.com",
-        items: [food, drink],
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      });
-  }  
+  const [orderId, setOrderId] = useState("");
+
+  async function submitOrder() {
+    const response = await fetch(
+      `https://cors-anywhere.herokuapp.com/http://51.8.246.178/order`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          origin: "daprcafe",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify({
+          customer_email: "john.doe@email.com",
+          items: [food, drink],
+        }),
+      }
+    );
+
+    const order: SubmitOrderResponse = await response.json();
+
+    setOrderId(order.id);
+  }
 
   return (
-    <div className="bg-red-500 opacity-90 h-14 sticky top-0 bottom-0 flex flex-col items-center">
-      <Button
-        onClick={submitOrder}
-        disabled={food === "" || drink === ""}
-        className="bg-red-100 font-semibold mt-3 text-red-900 rounded-md text-2xl w-80 disabled:opacity-60"
-      >
-        Order
-      </Button>
-    </div>
+    <>
+      {(food !== "" && drink !== "") ? (
+        <div className="bg-red-500 opacity-90 h-14 sticky top-0 bottom-0 flex flex-col items-center">
+          {orderId !== "" ? (
+            <>
+              <p className="text-white font-semibold text-2xl mt-1">
+                Order submitted. We will get back to you shortly. Thank you!
+              </p>
+              <p className="text-white font-semibold text-xs">
+                Order ID: {orderId}
+              </p>
+            </>
+          ) : (
+            <Button
+              onClick={submitOrder}
+              className="bg-red-100 font-semibold mt-3 text-red-900 rounded-md text-2xl w-80"
+            >
+              Order
+            </Button>
+          )}
+        </div>
+      ):
+      (
+        <>
+        </>
+      )}
+    </>
   );
 }
 
-export default OrderCommand
+export default OrderCommand;
