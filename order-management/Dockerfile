@@ -1,7 +1,7 @@
-FROM node:lts-alpine3.19@sha256:291e84d956f1aff38454bbd3da38941461ad569a185c20aa289f71f37ea08e23
+FROM node:lts-bullseye@sha256:6d72e3efec7d7844d5fd268e25da86c59306bd732341b25d810840dd1d4c05c8
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+COPY package*.json ./
 RUN npm install --production --silent && mv node_modules ../
 COPY . .
 EXPOSE 40000
