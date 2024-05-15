@@ -1,5 +1,4 @@
 import { Button } from '@headlessui/react'
-import { useEffect, useState } from 'react';
 
 type Props = {
   food: string;
