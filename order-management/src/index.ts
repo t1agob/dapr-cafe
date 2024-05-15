@@ -24,14 +24,15 @@ const client = new DaprClient({ daprHost, daprPort });
 
 // GET all orders
 app.get("/order", async (req: Request, res: Response) => {
+    console.log("Getting all orders");
+
     const result = await client.state.query(stateStoreName, {
         filter: {
             "EQ": { "status": "In Progress" }
         },
         sort: [
             {
-                "key": "status",
-                "order": "ASC"
+                "key": "id"
             }
         ],
         page: {
