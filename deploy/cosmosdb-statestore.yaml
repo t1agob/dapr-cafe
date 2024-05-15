@@ -1,0 +1,26 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: statestore
+spec:
+  type: state.azure.cosmosdb
+  version: v1
+  metadata:
+  - name: url
+    secretKeyRef:
+      name: cosmosdb-creds
+      key:  COSMOSDB_URL
+  - name: masterKey
+    secretKeyRef:
+      name: cosmosdb-creds
+      key:  COSMOSDB_MASTER_KEY
+  - name: database
+    secretKeyRef:
+      name: cosmosdb-creds
+      key:  COSMOSDB_DATABASE
+  - name: collection
+    secretKeyRef:
+      name: cosmosdb-creds
+      key:  COSMOSDB_COLLECTION
+  - name: keyPrefix
+    value: none 

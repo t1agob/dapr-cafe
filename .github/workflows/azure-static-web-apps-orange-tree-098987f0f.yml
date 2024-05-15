@@ -25,7 +25,7 @@ jobs:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
       - run: |
-          kubectl apply -f deploy/redis.yaml
+          kubectl apply -f deploy/cosmosdb-statestore.yaml
           kubectl apply -f deploy/pubsub.yaml
 
   build_and_deploy_order_management_service:

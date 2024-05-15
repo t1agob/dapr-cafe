@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: order-management
-          image: daprcafe.azurecr.io/order-management:latest
+          image: daprcafe.azurecr.io/order-management:new
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 40000
