@@ -39,7 +39,9 @@ app.get("/order", async (req: Request, res: Response) => {
         }
     });
 
-    return res.status(200).send(result);
+    console.log(result.results);
+
+    return res.status(200).send(result.results);
 });
 
 // GET order by id
