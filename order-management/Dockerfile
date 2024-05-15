@@ -1,11 +1,25 @@
-FROM node:lts-bullseye@sha256:6d72e3efec7d7844d5fd268e25da86c59306bd732341b25d810840dd1d4c05c8
-ENV NODE_ENV=production
+FROM node as builder
+# Create app directory
 WORKDIR /usr/src/app
+
+# Install app dependencies
 COPY package*.json ./
-RUN npm install --production --silent && mv node_modules ../
+
+RUN npm ci
 COPY . .
-EXPOSE 40000
-RUN chown -R node /usr/src/app
-USER node
 RUN npm run build
-CMD ["npm", "run", "start"]
+
+FROM node:slim
+ENV NODE_ENV production
+USER node
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package*.json ./
+RUN npm ci --production
+COPY --from=builder /usr/src/app/dist ./dist
+
+EXPOSE 40000
+CMD [ "npm", "run", "start" ]
