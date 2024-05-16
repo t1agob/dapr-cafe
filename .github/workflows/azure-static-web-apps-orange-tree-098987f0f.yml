@@ -27,6 +27,7 @@ jobs:
       - run: |
           kubectl apply -f deploy/cosmosdb-statestore.yaml
           kubectl apply -f deploy/pubsub.yaml
+          kubectl apply -f deploy/secret-store.yaml
 
   build_and_deploy_order_management_service:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')

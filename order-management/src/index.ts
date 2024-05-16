@@ -15,16 +15,35 @@ app.use(cors());
 const daprHost = process.env.DAPR_HOST ?? "http://localhost";
 const daprPort = process.env.DAPR_HTTP_PORT ?? "40100";
 const httpServerPort = process.env.PORT ?? "40000";
-const pubSubName = "orderpubsub";
-const newOrderPubSubTopic = "orders";
-const completeOrderPubSubTopic = "completeorder";
-const stateStoreName = "statestore";
+
+const DAPR_SECRET_STORE = "secretstore";
+let pubSubName = "";
+let newOrderPubSubTopic = "";
+let completeOrderPubSubTopic = "";
+let stateStoreName = "";
+
+let isInitialized = false;
 
 const client = new DaprClient({ daprHost, daprPort });
+
+async function getSecrets() {
+    if(pubSubName === "" || newOrderPubSubTopic === "" || completeOrderPubSubTopic === "" || stateStoreName === "") {
+        pubSubName = JSON.stringify(await client.secret.get(DAPR_SECRET_STORE, "pubSubName"));
+        newOrderPubSubTopic = JSON.stringify(await client.secret.get(DAPR_SECRET_STORE, "newOrderPubSubTopic"));
+        completeOrderPubSubTopic = JSON.stringify(await client.secret.get(DAPR_SECRET_STORE, "completeOrderPubSubTopic"));
+        stateStoreName = JSON.stringify(await client.secret.get(DAPR_SECRET_STORE, "stateStoreName"));
+
+        isInitialized = true;
+    }
+}
 
 // GET all orders
 app.get("/order", async (req: Request, res: Response) => {
     console.log("Getting all orders");
+
+    if(!isInitialized) {
+        await getSecrets();
+    }
 
     const result = await client.state.query(stateStoreName, {
         filter: {
@@ -51,6 +70,10 @@ app.get("/order/:id", async (req: Request, res: Response) => {
         res.status(400).send("Id is required");
     }
 
+    if (!isInitialized) {
+        await getSecrets();
+    }
+
     console.log(req.params.id);
     const result = await client.state.get(stateStoreName, req.params.id);
     if (result === null || result === undefined || result === "") {
@@ -65,6 +88,10 @@ app.post("/order", async (req: Request, res: Response) => {
     console.log(req.body);
     if(!req.body || Object.keys(req.body).length === 0) {
         res.status(400).send("Order payload is required");
+    }
+
+    if (!isInitialized) {
+        await getSecrets();
     }
 
     const orderId = uuidv4();
@@ -92,6 +119,10 @@ app.put("/order/:id/complete", async (req: Request, res: Response) => {
         res.status(400).send("Order ID is required");
     }
 
+    if (!isInitialized) {
+        await getSecrets();
+    }
+    
     const orderId = req.params.id;
     
     const result = await client.pubsub.publish(pubSubName, completeOrderPubSubTopic, orderId);
