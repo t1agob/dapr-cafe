@@ -9,9 +9,9 @@ Modern Software is usually built in a global and distributed way, and leverages 
 
 One of the main challenges that teams face is getting stuck to decisions they make. If you choose a Cloud or Database provider you are typically going to stay with it for a long time. This fact is usually driven by the complexity of moving between platforms and it is a major factor when making architectural and platform decisions.
 
-The role of DAPR is to facilitate the process of building distributed applications by abstrating the platform components. This makes it almost seamless to move between providers without code changes. It also simplifies the code required to integrate with databases, pubsub platforms and others, while enforcing best practices for distributed platforms such as retrying failed requests automatically.
+The role of [Dapr](https://docs.dapr.io/) is to facilitate the process of building distributed applications by abstrating the platform components. This makes it almost seamless to move between providers without code changes. It also simplifies the code required to integrate with databases, pubsub platforms and others, while enforcing best practices for distributed platforms such as retrying failed requests automatically.
 
-With this demo we try to cover some of the aspects and complexities of event-driven systems and show how DAPR overcomes them.
+With this demo we try to cover some of the aspects and complexities of event-driven systems and show how Dapr overcomes them.
 
 ## The application
 
@@ -19,17 +19,17 @@ This demo is provides a frontend application for easy interaction with the platf
 
 ![webpage-screenshot](/img/webapp-capture.png)
 
-The backend side of the application is a distributed system built in a microservices approach with pluggable components provided by DAPR which makes it easier to swap providers without code changes.
+The backend side of the application is a distributed system built in a microservices approach with pluggable components provided by Dapr which makes it easier to swap providers without code changes.
 
-This provides great developer experience as you can use some components locally but other providers when deploying to your production environment (e.g. Azure Kubernetes Services cluster in Microsoft Azure).
+This provides great developer experience as you can use some components locally but other providers when deploying to your production environment (e.g. [Azure Kubernetes Services](https://azure.microsoft.com/en-us/products/kubernetes-service) cluster in Microsoft Azure).
 
 ![local-vs-prod](/img/local-vs-prod.png)
 
 ## How your events flow
 
-When you submit and order from the frontend component (not using DAPR) a request is sent to the order management service that publishes a message to a pubsub topic with the order details.
+When you submit and order from the frontend component (not using Dapr) a request is sent to the order management service that publishes a message to a pubsub topic with the order details.
 
-This message is then processed by the order-processor service that is active listening to events sent to a topic. This service checks if the order information received is already being processed or not to ensure idempotency. This is very important to ensure that we don't process the same order more than once when a potential retry occurs.
+This message is then processed by the order-processor service that is active listening to events sent to a topic. This service checks if the order information received is already being processed or not to ensure [idempotency](https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html). This is very important to ensure that we don't process the same order more than once when a potential retry occurs.
 
 Once the order is validated, the order information is persisted in the state store for employee processing.
 
@@ -37,7 +37,7 @@ The stored information can be queried or updated from the order management servi
 
 ![high-level-architecture](/img/architecture%20diagram.png)
 
-The order management service also leverages a secret store component that contains secrets to be used at runtime. This component allows developers to abstract the platform where they are storing their secrets in (e.g Azure Key Vault, DAPR local secret store, ...).
+The order management service also leverages a secret store component that contains secrets to be used at runtime. This component allows developers to abstract the platform where they are storing their secrets in (e.g Azure Key Vault, Dapr local secret store, ...).
 
 Now that you understand how we built the demo, give it a go!
 
@@ -56,9 +56,9 @@ This repository contains all the components necessary to deploy locally or to Az
    git clone https://github.com/[YOUR-GITHUB-ACCOUNT]/dapr-cafe
    ```
 
-2. [Install DAPR cli](https://docs.dapr.io/getting-started/install-dapr-cli/) (if you haven't done so)
-3. [Iniatilize DAPR](https://docs.dapr.io/getting-started/install-dapr-selfhost/) in your local environment
-4. Run all services with [Multi-App run](https://docs.dapr.io/developing-applications/local-development/multi-app-dapr-run/multi-app-overview/)
+2. [Install Dapr cli](https://docs.dapr.io/getting-started/install-dapr-cli/) (if you haven't done so)
+3. [Iniatilize Dapr](https://docs.dapr.io/getting-started/install-dapr-selfhost/) in your local environment
+4. Run all services with [multi-app run](https://docs.dapr.io/developing-applications/local-development/multi-app-dapr-run/multi-app-overview/)
    In your project root run the following command to deploy all services and components required to run you application.
 
    ```bash
@@ -95,7 +95,7 @@ To deploy in Microsoft Azure there are a few manual steps that are not covered i
 
    ![github-secrets](/img/github-secrets.png)
 
-   **Warning:** Secret names are case sensitive. Make sure you get the casing right to avoid errors when running GitHub actions.
+    **Warning:** Secret names are case sensitive. Make sure you get the casing right to avoid errors when running GitHub actions.
 
    7. Run GitHub action to deploy services and components to Azure.
 
@@ -105,4 +105,4 @@ To deploy in Microsoft Azure there are a few manual steps that are not covered i
 
 ## Summary
 
-I hope you had fun playing with DAPR locally and you were able to deploy it to Azure and see that you can easily swap the components with zero code changes and it still worked.
+I hope you had fun playing with Dapr locally and you were able to deploy it to Azure and see that you can easily swap the components with zero code changes and it still worked.
