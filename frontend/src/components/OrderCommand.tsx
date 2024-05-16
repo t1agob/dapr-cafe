@@ -1,6 +1,8 @@
 import { Button } from "@headlessui/react";
 import { useState } from "react";
 
+const API_URL = process.env.API_URL ?? "https://cors-anywhere.herokuapp.com/http://51.8.246.178";
+
 type Props = {
   food: string;
   drink: string;
@@ -18,7 +20,7 @@ function OrderCommand({ food, drink }: Props) {
 
   async function submitOrder() {
     const response = await fetch(
-      `https://cors-anywhere.herokuapp.com/http://51.8.246.178/order`,
+      `${API_URL}/order`,
       {
         method: "POST",
         headers: {
