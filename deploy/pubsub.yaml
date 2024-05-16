@@ -10,6 +10,8 @@ spec:
   - name: redisHost
     value: "redis-master:6379"
   - name: redisPassword
-    value: rC3rlKuJyw
+    secretKeyRef:
+        name: redis-secret
+        key:  REDIS_PASSWORD
   - name: keyPrefix
     value: none 
